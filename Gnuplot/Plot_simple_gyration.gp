@@ -41,6 +41,9 @@ plot \
     rk4   using 2:3 with lines lw 2 title "RK4", \
     boris using 2:3 with lines lw 2 dashtype 2 title "Boris"
 
+unset xrange
+unset yrange
+
 # ==========================================================
 # z(t)
 # ==========================================================
