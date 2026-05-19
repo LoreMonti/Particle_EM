@@ -1,8 +1,6 @@
 # Particle(s) in Electromagnetic Fields
 
-Numerical simulation of non-relativistic charged particles moving in prescribed electromagnetic fields.
-
-The code solves the Lorentz force equation using either a fourth-order Runge-Kutta method or the Boris particle pusher. It supports different physical configurations, including simple gyration, ExB drift, and a magnetic X-point configuration.
+The code numerically solves the non-relativistic Lorentz force equation for charged particles moving in prescribed electromagnetic fields using either a fourth-order Runge–Kutta method or the Boris particle pusher. It supports several benchmark configurations, including simple gyration, ExB drift, and a magnetic X-point.
 
 ---
 
