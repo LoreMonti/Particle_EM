@@ -10,26 +10,26 @@ The code solves the Lorentz force equation using either a fourth-order Runge-Kut
 
 The equation of motion is
 
-\[
+$$
 \frac{d\mathbf{x}}{dt} = \mathbf{v}
-\]
+$$
 
-\[
+$$
 \frac{d\mathbf{v}}{dt} =
 \frac{q}{m}
 \left(
 \mathbf{E} + \frac{\mathbf{v}}{c} \times \mathbf{B}
 \right)
-\]
+$$
 
 where:
 
-- \(\mathbf{x}\) is the particle position,
-- \(\mathbf{v}\) is the particle velocity,
-- \(q/m\) is the charge-to-mass ratio,
-- \(\mathbf{E}\) is the electric field,
-- \(\mathbf{B}\) is the magnetic field,
-- \(c\) is the speed of light in normalized units.
+- $$\mathbf{x}$$ is the particle position,
+- $$\mathbf{v}$$ is the particle velocity,
+- $$q/m$$ is the charge-to-mass ratio,
+- $$\mathbf{E}$$ is the electric field,
+- $$\mathbf{B}$$ is the magnetic field,
+- $$c$$ is the speed of light in normalized units.
 
 The code uses normalized units by default.
 
@@ -363,13 +363,3 @@ This project is released under the MIT License.
 
 Lorenzo Monti
 May 2026
-
-````
-
-Poi fai:
-
-```bash
-git add README.md
-git commit -m "Improve README documentation"
-git push
-````
