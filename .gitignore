@@ -1,0 +1,29 @@
+# Executables
+main
+particle_em
+*.out
+*.exe
+
+# Object files
+*.o
+*.obj
+
+# Build folders
+build/
+bin/
+
+# Generated simulation data
+Data/*.dat
+
+# Generated plots
+Plots/*.pdf
+Plots/*.png
+Plots/*.jpg
+
+# macOS
+.DS_Store
+
+# Editors
+.vscode/
+.idea/
+*.swp
