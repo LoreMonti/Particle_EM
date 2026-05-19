@@ -12,9 +12,7 @@ The equation of motion is
 
 $$
 \frac{d\mathbf{x}}{dt} = \mathbf{v}
-$$
-
-$$
+\qquad \qquad
 \frac{d\mathbf{v}}{dt} =
 \frac{q}{m}
 \left(
@@ -361,5 +359,5 @@ This project is released under the MIT License.
 
 ## Author
 
-Lorenzo Monti
+Lorenzo Monti,
 May 2026
