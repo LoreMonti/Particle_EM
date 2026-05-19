@@ -17,6 +17,8 @@ void CreateOutputFolders()
 // Write simulation output
 void WriteOutput(ofstream &fdata, double t, double *Y, int Npart)
 {
+    (void)Npart;
+    
 #if CASE == CASE_X_POINT
 
     for (int p = 0; p < Npart; p++) {
@@ -68,6 +70,7 @@ void PrintFinalDiagnostics(double tb, double te, double dt, double *Y, int Npart
     (void)tb;
     (void)te;
     (void)dt;
+    (void)Npart;
 
     cout << "============================================" << endl;
     cout << "Final quantitative diagnostics" << endl;

@@ -115,6 +115,8 @@ int main()
 
     InitializeParticles(Y, Npart);
 
+    const double energy0 = KineticEnergy(Y, Npart);
+
     // ======================================================
     // 4. Open output files
     // ======================================================
@@ -148,11 +150,11 @@ int main()
 #endif
 
 #if CASE == CASE_SIMPLE_GYRATION
-    fdiag << "# t r_xy v_abs z" << endl;
+    fdiag << "# t r_xy v_abs z energy rel_energy_error rel_speed_error" << endl;
 #elif CASE == CASE_EXB_DRIFT
-    fdiag << "# t x y v_abs v_drift_theory" << endl;
+    fdiag << "# t x y v_abs v_drift_theory energy rel_energy_error rel_speed_error" << endl;
 #elif CASE == CASE_X_POINT
-    fdiag << "# t v_mean v_max z_mean z_max x_vmax y_vmax z_vmax" << endl;
+    fdiag << "# t v_mean v_max z_mean z_max x_vmax y_vmax z_vmax energy rel_energy_error" << endl;
 #endif
 
     // Save initial condition.
@@ -186,21 +188,37 @@ int main()
         const double r_xy  = sqrt(Y[0] * Y[0] + Y[1] * Y[1]);
         const double v_abs = VelocityMagnitude(Y[3], Y[4], Y[5]);
 
+        const double energy = KineticEnergy(Y, Npart);
+        const double rel_energy_error = RelativeError(energy, energy0);
+
+        const double speed0 = VelocityMagnitude(Y[3], Y[4], Y[5]);
+        const double rel_speed_error = RelativeError(v_abs, speed0);
+
         fdiag << t << " "
-              << r_xy << " "
-              << v_abs << " "
-              << Y[2] << endl;
+            << r_xy << " "
+            << v_abs << " "
+            << Y[2] << " "
+            << energy << " "
+            << rel_energy_error << " "
+            << rel_speed_error << endl;
 
 #elif CASE == CASE_EXB_DRIFT
 
         const double v_abs = VelocityMagnitude(Y[3], Y[4], Y[5]);
         const double v_drift_theory = E0;
 
+        const double energy = KineticEnergy(Y, Npart);
+        const double rel_energy_error = RelativeError(energy, energy0);
+        const double rel_speed_error  = RelativeError(v_abs, speed0);
+
         fdiag << t << " "
-              << Y[0] << " "
-              << Y[1] << " "
-              << v_abs << " "
-              << v_drift_theory << endl;
+            << Y[0] << " "
+            << Y[1] << " "
+            << v_abs << " "
+            << v_drift_theory << " "
+            << energy << " "
+            << rel_energy_error << " "
+            << rel_speed_error << endl;
 
 #elif CASE == CASE_X_POINT
 
@@ -239,14 +257,19 @@ int main()
         const double v_mean = v_sum / double(Npart);
         const double z_mean = z_sum / double(Npart);
 
+        const double energy = KineticEnergy(Y, Npart);
+        const double rel_energy_error = RelativeError(energy, energy0);
+
         fdiag << t << " "
-              << v_mean << " "
-              << v_max << " "
-              << z_mean << " "
-              << z_max << " "
-              << x_vmax << " "
-              << y_vmax << " "
-              << z_vmax << endl;
+            << v_mean << " "
+            << v_max << " "
+            << z_mean << " "
+            << z_max << " "
+            << x_vmax << " "
+            << y_vmax << " "
+            << z_vmax << " "
+            << energy << " "
+            << rel_energy_error << endl;
 
 #endif
 

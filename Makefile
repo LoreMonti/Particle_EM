@@ -3,7 +3,7 @@ CXXFLAGS = -O3 -std=c++11 -Wall -Wextra
 
 TARGET = main
 
-SOURCES = main.cpp fields.cpp integrators.cpp initialization.cpp output.cpp
+SOURCES = main.cpp fields.cpp integrators.cpp initialization.cpp output.cpp diagnostics.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 
 all: $(TARGET)

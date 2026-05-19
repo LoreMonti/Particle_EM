@@ -27,7 +27,7 @@ using namespace std;
 #define CASE_EXB_DRIFT       2
 #define CASE_X_POINT         3
 
-#define CASE CASE_X_POINT
+#define CASE CASE_SIMPLE_GYRATION
 
 // Numerical method
 #define METHOD_RK4    1
@@ -57,8 +57,8 @@ const double E0      = 0.2;
 // Simulation parameters
 // ==========================================================
 const double TB = 0.0;
-const double TE = 50.0;
-const int NSTEPS = 5000;
+const double TE = 500.0;
+const int NSTEPS = 100000;
 const int OUTPUT_EVERY = 10;
 
 // ==========================================================
@@ -104,5 +104,9 @@ void PrintFinalDiagnostics(double tb, double te, double dt,
 string GetMethodTag();
 string GetCaseTag();
 double VelocityMagnitude(double vx, double vy, double vz);
+
+// Diagnostics
+double KineticEnergy(const double Y[], int Npart);
+double RelativeError(double value, double reference);
 
 #endif

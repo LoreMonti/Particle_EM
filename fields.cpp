@@ -41,6 +41,8 @@ void ElectricField(double x, double y, double z, double t,
 void MagneticField(double x, double y, double z, double t,
                    double &Bx, double &By, double &Bz)
 {
+    (void)x;
+    (void)y;
     (void)z;
     (void)t;
 

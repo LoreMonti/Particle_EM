@@ -9,6 +9,8 @@
 // Initialization of particles
 void InitializeParticles(double *Y, int Npart)
 {
+    (void)Npart;
+    
 #if CASE == CASE_SIMPLE_GYRATION
 
     Y[0] = 1.0;   // x
