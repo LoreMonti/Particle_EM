@@ -79,4 +79,23 @@ plot \
     rk4_diag   using 1:2 with lines lw 2 title "RK4", \
     boris_diag using 1:2 with lines lw 2 dashtype 2 title "Boris"
 
+
+# ----------------------------------------------------------
+# Relative speed error
+# ----------------------------------------------------------
+set output outdir . "/long_time_speed_error.pdf"
+
+set title "Long-Time Speed Conservation: RK4 vs Boris"
+set xlabel "t"
+set ylabel "Relative speed error"
+set logscale y
+set format y "10^{%T}"
+
+plot \
+    rk4_diag   using 1:(abs($7) > 0 ? abs($7) : 1e-16) with lines lw 2 title "RK4", \
+    boris_diag using 1:(abs($7) > 0 ? abs($7) : 1e-16) with lines lw 2 dashtype 2 title "Boris"
+
+unset logscale y
+unset format y
+
 set output
