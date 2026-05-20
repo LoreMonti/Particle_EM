@@ -31,7 +31,7 @@ void ElectricField(double x, double y, double z, double t,
 
     Ex = 0.0;
     Ey = 0.0;
-    Ez = 0.5;
+    Ez = 1.0;
 
 #endif
 }

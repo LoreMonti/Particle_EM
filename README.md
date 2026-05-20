@@ -44,6 +44,9 @@ The code uses normalized units by default.
 - Gnuplot-compatible output files
 - Modular C++ project structure
 - Reproducible compilation through a Makefile
+- Python-based 3D GIF animations
+- Automated generation of animated particle trajectories
+- Long-time diagnostics for energy and speed conservation
 
 ---
 
@@ -230,40 +233,12 @@ For this reason, the Boris method is usually the preferred choice for long-time 
 
 ---
 
-## Compilation
-
-Compile the project with:
-
-```bash
-make
-```
-
-The Makefile uses:
-
-```bash
-g++ -O3 -std=c++11 -Wall -Wextra
-```
-
-This enables optimization and useful compiler warnings.
-
----
-
 ## Run
 
-Run the simulation with:
+Compile and execute the simulation with:
 
 ```bash
 make run
-```
-
----
-
-## Clean
-
-Remove the executable and object files with:
-
-```bash
-make clean
 ```
 
 ---
@@ -292,17 +267,23 @@ The output filename automatically depends on the selected physical case and nume
 
 ---
 
-## Plotting
+## Plotting and Visualization
 
-Gnuplot scripts are stored in the `Gnuplot/` directory.
+Static diagnostic plots can be generated using Gnuplot scripts stored in the `Gnuplot/` directory.
 
 Example:
 
 ```bash
 gnuplot Gnuplot/Plot_xpoint.gp
+````
+
+Animated three-dimensional GIFs can be generated with the Python visualization script:
+
+```bash
+python Scripts/plot_3d_gifs.py
 ```
 
-Generated figures are saved in the `Plots/` directory.
+Generated figures and animations are saved in the `Plots/` directory.
 
 ---
 
@@ -310,20 +291,14 @@ Generated figures are saved in the `Plots/` directory.
 
 1. Select the physical case in `particle_em.h`.
 2. Select the numerical method in `particle_em.h`.
-3. Compile the code:
-
-```bash
-make
-```
-
-4. Run the simulation:
+3. Compile the code and run the simulation:
 
 ```bash
 make run
 ```
 
-5. Generate plots with Gnuplot.
-6. Inspect data, diagnostics, and final terminal output.
+4. Generate plots with Gnuplot.
+5. Inspect data, diagnostics, and final terminal output.
 
 ---
 
@@ -341,11 +316,9 @@ Future improvements may include:
 
 * relativistic particle dynamics,
 * adaptive time stepping,
-* energy conservation diagnostics,
 * OpenMP parallelization,
 * unit tests,
 * additional electromagnetic field configurations,
-* comparison between RK4 and Boris over long integration times.
 
 ---
 

@@ -1,0 +1,271 @@
+import os
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from matplotlib.animation import FuncAnimation, PillowWriter
+
+
+# ==========================================================
+# User settings
+# ==========================================================
+
+BASE_DIR = "/Users/lorenzo/Desktop/GitHub/Particle_EM"
+
+# Only Boris simulations
+CASES_TO_RUN = [
+    "simple_gyration",
+    "exb_drift",
+    "xpoint",     
+]
+
+METHOD = "boris"
+
+MAX_FRAMES = 250
+FPS = 20
+TRAIL_LENGTH = 80
+PARTICLE_SIZE = 8
+ROTATE_CAMERA = True
+
+
+# ==========================================================
+# Helper functions
+# ==========================================================
+
+def get_paths(case):
+    data_file = os.path.join(
+        BASE_DIR,
+        "Data",
+        f"{case}_{METHOD}.dat"
+    )
+
+    gif_file = os.path.join(
+        BASE_DIR,
+        "Plots",
+        f"{case}_{METHOD}_3d.gif"
+    )
+
+    return data_file, gif_file
+
+
+def read_particle_data(data_file):
+    """
+    Supported formats:
+
+    Single particle:
+    t x y z vx vy vz v_abs
+
+    Multi-particle:
+    t particle_id x y z vx vy vz v_abs
+    """
+
+    raw = pd.read_csv(
+        data_file,
+        comment="#",
+        sep=r"\s+",
+        header=None,
+    )
+
+    # Single-particle format
+    if raw.shape[1] == 8:
+        raw.columns = [
+            "t", "x", "y", "z",
+            "vx", "vy", "vz", "v_abs"
+        ]
+        raw["particle_id"] = 0
+
+    # Multi-particle format
+    elif raw.shape[1] == 9:
+        raw.columns = [
+            "t", "particle_id",
+            "x", "y", "z",
+            "vx", "vy", "vz",
+            "v_abs"
+        ]
+
+    else:
+        raise ValueError(
+            f"Unexpected number of columns ({raw.shape[1]}) "
+            f"in file {data_file}"
+        )
+
+    return raw
+
+
+def add_padding(limits, pad=0.10):
+    a, b = limits
+    width = b - a
+
+    if width == 0:
+        width = 1.0
+
+    return a - pad * width, b + pad * width
+
+
+def get_axis_limits(df):
+    xlim = add_padding((df["x"].min(), df["x"].max()))
+    ylim = add_padding((df["y"].min(), df["y"].max()))
+    zlim = add_padding((df["z"].min(), df["z"].max()))
+    return xlim, ylim, zlim
+
+
+def reduce_times(df):
+    times = np.sort(df["t"].unique())
+
+    if len(times) > MAX_FRAMES:
+        idx = np.linspace(
+            0,
+            len(times) - 1,
+            MAX_FRAMES
+        ).astype(int)
+
+        times = times[idx]
+
+    return times
+
+
+def pretty_title(case):
+    titles = {
+        "simple_gyration": "Simple Gyration",
+        "exb_drift": "E x B Drift",
+        "x_point": "X-Point",
+        "xpoint": "X-Point",
+    }
+
+    return f"{titles.get(case, case)} - Boris"
+
+
+# ==========================================================
+# GIF generation
+# ==========================================================
+
+def save_3d_gif(df, case, gif_file):
+    times = reduce_times(df)
+    xlim, ylim, zlim = get_axis_limits(df)
+
+    particle_ids = np.sort(df["particle_id"].unique())
+    is_single_particle = (len(particle_ids) == 1)
+
+    title = pretty_title(case)
+
+    fig = plt.figure(figsize=(7, 6))
+    ax = fig.add_subplot(111, projection="3d")
+
+    def update(frame_index):
+        ax.clear()
+
+        t = times[frame_index]
+        current = df[df["t"] == t]
+
+        # Labels and title
+        ax.set_title(title)
+        ax.set_xlabel("x")
+        ax.set_ylabel("y")
+        ax.set_zlabel("z")
+
+        # Axis limits
+        ax.set_xlim(xlim)
+        ax.set_ylim(ylim)
+        ax.set_zlim(zlim)
+
+        # Rotating camera
+        if ROTATE_CAMERA:
+            ax.view_init(
+                elev=25,
+                azim=45 + 0.25 * frame_index
+            )
+        else:
+            ax.view_init(
+                elev=25,
+                azim=45
+            )
+
+        # Single-particle cases:
+        # show trajectory tail
+        if is_single_particle:
+            full = df[df["particle_id"] == 0]
+            past = full[full["t"] <= t].tail(TRAIL_LENGTH)
+
+            ax.plot(
+                past["x"],
+                past["y"],
+                past["z"],
+                lw=2
+            )
+
+            ax.scatter(
+                current["x"],
+                current["y"],
+                current["z"],
+                s=40,
+                c=current["v_abs"]
+            )
+
+        # Multi-particle cases (X-point)
+        else:
+            ax.scatter(
+                current["x"],
+                current["y"],
+                current["z"],
+                s=PARTICLE_SIZE,
+                c=current["v_abs"]
+            )
+
+        # Time label
+        ax.text2D(
+            0.05,
+            0.95,
+            f"t = {t:.2f}",
+            transform=ax.transAxes
+        )
+
+        return ax,
+
+    # Create animation
+    anim = FuncAnimation(
+        fig,
+        update,
+        frames=len(times),
+        interval=1000 / FPS,
+        blit=False
+    )
+
+    # Ensure output directory exists
+    os.makedirs(
+        os.path.dirname(gif_file),
+        exist_ok=True
+    )
+
+    # Save GIF
+    writer = PillowWriter(fps=FPS)
+    anim.save(gif_file, writer=writer)
+
+    plt.close(fig)
+
+    print(f"Saved GIF: {gif_file}")
+
+
+# ==========================================================
+# Main program
+# ==========================================================
+
+def main():
+    for case in CASES_TO_RUN:
+        data_file, gif_file = get_paths(case)
+
+        if not os.path.exists(data_file):
+            print(f"File not found: {data_file}")
+            continue
+
+        print("========================================")
+        print(f"Processing {case}_{METHOD}")
+        print("========================================")
+
+        df = read_particle_data(data_file)
+        save_3d_gif(df, case, gif_file)
+
+    print("All GIFs generated successfully.")
+
+
+if __name__ == "__main__":
+    main()

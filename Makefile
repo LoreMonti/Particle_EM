@@ -1,21 +1,26 @@
 CXX = g++
 CXXFLAGS = -O3 -std=c++11 -Wall -Wextra
 
-TARGET = main
+SRC = main.cpp fields.cpp integrators.cpp initialization.cpp output.cpp diagnostics.cpp
+OBJ = $(SRC:.cpp=.o)
 
-SOURCES = main.cpp fields.cpp integrators.cpp initialization.cpp output.cpp diagnostics.cpp
-OBJECTS = $(SOURCES:.cpp=.o)
+TARGET = main
 
 all: $(TARGET)
 
-$(TARGET): $(OBJECTS)
-	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $(TARGET)
+$(TARGET): $(OBJ)
+	@$(CXX) $(CXXFLAGS) $(OBJ) -o $(TARGET)
+	@rm -f $(OBJ)
+	@echo "Build completed successfully."
 
 %.o: %.cpp particle_em.h
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	@$(CXX) $(CXXFLAGS) -c $< -o $@
 
-run: all
-	./$(TARGET)
+run: $(TARGET)
+	@./$(TARGET)
 
 clean:
-	rm -f $(OBJECTS) $(TARGET)
+	@rm -f $(OBJ) $(TARGET)
+	@echo "Clean completed."
+
+.PHONY: all run clean

@@ -18,7 +18,7 @@
 // Compilation example:
 // g++ main.cpp fields.cpp integrators.cpp initialization.cpp output.cpp -o main
 // git add .
-// git commit -m "Aggiornamenti"
+// git commit -m "Updates"
 // git push
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -119,6 +119,9 @@ int main()
     InitializeParticles(Y, Npart);
 
     const double energy0 = KineticEnergy(Y, Npart);
+#if CASE == CASE_EXB_DRIFT
+    const double speed0 = VelocityMagnitude(Y[3], Y[4], Y[5]);
+#endif
 
     // ======================================================
     // 4. Open output files

@@ -27,7 +27,7 @@ using namespace std;
 #define CASE_EXB_DRIFT       2
 #define CASE_X_POINT         3
 
-#define CASE CASE_SIMPLE_GYRATION
+#define CASE CASE_X_POINT
 
 // Numerical method
 #define METHOD_RK4    1
@@ -57,9 +57,9 @@ const double E0      = 0.2;
 // Simulation parameters
 // ==========================================================
 const double TB = 0.0;
-const double TE = 500.0;
-const int NSTEPS = 100000;
-const int OUTPUT_EVERY = 10;
+const double TE = 200.0;
+const int NSTEPS = 20000;
+const int OUTPUT_EVERY = 20;
 
 // ==========================================================
 // X-point parameters
