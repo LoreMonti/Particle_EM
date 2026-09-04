@@ -2,6 +2,31 @@
 
 The code numerically solves the non-relativistic Lorentz force equation for charged particles moving in prescribed electromagnetic fields using either a fourth-order Runge–Kutta method or the Boris particle pusher. It supports several benchmark configurations, including simple gyration, ExB drift, and a magnetic X-point.
 
+<p align="center">
+  <img src="docs/energy_error.png" alt="Long-time energy conservation: RK4 vs Boris" width="70%">
+</p>
+
+<sub><b>Why the Boris pusher.</b> Relative kinetic-energy error over 500 time
+units of gyration. RK4 shows a secular drift that grows without bound
+(reaching $\sim10^{-11}$), while the Boris integrator stays bounded around
+$10^{-14}$ — it does not conserve energy exactly, but the error never
+accumulates. This is the reason Boris is the standard particle pusher in
+plasma physics.</sub>
+
+<p align="center">
+  <img src="docs/exb_drift_theory.png" alt="ExB drift against analytical prediction" width="49%">
+  <img src="docs/long_time_trajectory.png" alt="Long-time trajectory comparison" width="49%">
+</p>
+
+<sub><b>Left:</b> simulated E×B drift velocity against the analytical
+prediction $\mathbf{v}_E = c\,(\mathbf{E}\times\mathbf{B})/B^2$.
+<b>Right:</b> long-time radial trajectory, RK4 versus Boris.</sub>
+
+**Animations (3D, generated with Gnuplot):**
+[simple gyration](Plots/simple_gyration_boris_3d.gif) ·
+[E×B drift](Plots/exb_drift_boris_3d.gif) ·
+[magnetic X-point](Plots/xpoint_boris_3d.gif)
+
 ---
 
 ## Overview
